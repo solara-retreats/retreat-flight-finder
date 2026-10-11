@@ -166,12 +166,17 @@ export default function Home() {
 
   const results = retreats
     .filter((retreat) => budget === "unlimited" || retreat.price + retreat.flightPrice <= Number(budget || 0))
-    .sort((a, b) =>
-      sort === "price"
-      ? (a.price + a.flightPrice) - (b.price + b.flightPrice)
-        : Number(a.duration.split("-")[0]) -
-          Number(b.duration.split("-")[0])
-    );
+    
+.sort((a, b) => {
+  if (sort === "price") {
+    return (a.price + a.flightPrice) - (b.price + b.flightPrice);
+  }
+
+  const daysA = Number(a.duration.match(/\d+/)?.[0] ?? 0);
+const daysB = Number(b.duration.match(/\d+/)?.[0] ?? 0);
+
+  return daysA - daysB;
+});
 
   return (
     <main className="min-h-screen bg-[#faf8f4] text-[#253b32]">
