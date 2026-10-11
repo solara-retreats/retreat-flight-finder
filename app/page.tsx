@@ -123,7 +123,7 @@ export default function Home() {
           </label>
 
           <label className="text-sm text-[#69736b]">
-            Rozpočet na letenku
+            Celkový rozpočet na cestu
             <select
               value={budget}
               onChange={(e) => setBudget(e.target.value)}
