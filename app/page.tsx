@@ -130,6 +130,39 @@ export default function Home() {
   const [budget, setBudget] = useState("unlimited");
   const [sort, setSort] = useState("price");
   const [searched, setSearched] = useState(false);
+  const [flightOffers, setFlightOffers] = useState<any[]>([]);
+  const EUR_TO_CZK = 25;
+  console.log("Duffel nabídky:", flightOffers);
+  
+  const [flightError, setFlightError] = useState("");
+
+  async function searchFlights() {
+    setFlightError("");
+    setFlightOffers([]);
+    
+
+    try {
+      const response = await fetch(
+        "/api/flights?origin=PRG&destination=RAK&departureDate=2026-11-10&returnDate=2026-11-17"
+      );
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || "Vyhledávání letů se nezdařilo.");
+      }
+
+      setFlightOffers(data.offers || []);
+      setSearched(true);
+    } catch (error) {
+      setFlightError(
+        error instanceof Error
+          ? error.message
+          : "Nepodařilo se načíst lety."
+      );
+    }
+  }
+
 
   const results = retreats
     .filter((retreat) => budget === "unlimited" || retreat.price + retreat.flightPrice <= Number(budget || 0))
@@ -223,12 +256,38 @@ export default function Home() {
           </label>
 
           <button
-            onClick={() => setSearched(true)}
+            onClick={searchFlights}
             className="rounded-lg bg-[#253b32] px-5 py-4 font-medium text-white transition hover:bg-[#365447] md:col-span-4"
           >
             Najít svůj retreat →
           </button>
         </div>
+
+        
+  {flightError && (
+    <p className="mb-4 rounded-lg bg-red-50 p-4 text-red-700">
+      {flightError}
+    </p>
+  )}
+
+  {flightOffers.length > 0 && (
+    <div className="mb-6 rounded-xl border border-[#e7e1d7] bg-white p-5">
+      <h3 className="text-lg font-semibold">Nalezená nabídka letu</h3>
+      <p className="mt-2 text-sm text-[#69736b]">
+        Praha (PRG) ↔ Marrákeš (RAK) · 10.–17. listopadu 2026
+      </p>
+      <p className="mt-2 text-2xl font-semibold">
+        {Number(flightOffers[0].totalAmount).toLocaleString("cs-CZ", {
+          minimumFractionDigits: 2,
+          maximumFractionDigits: 2,
+        })}{" "}
+        {flightOffers[0].currency}
+      </p>
+      <p className="mt-1 text-xs text-[#7a8278]">
+        Testovací nabídka z Duffel API; cena je uvedena v měně vrácené API.
+      </p>
+    </div>
+  )}
 
         <div className="mb-6 mt-14 flex flex-wrap items-end justify-between gap-4">
           <div>
@@ -296,12 +355,31 @@ export default function Home() {
 <p className="mt-2 text-sm text-[#69736b]">
   Orientační cena letenky
 </p>
-<p className="text-lg font-medium">
-  {retreat.flightPrice.toLocaleString("cs-CZ")} Kč
-</p>
-<p className="mt-2 text-sm font-semibold text-[#253b32]">
-  Celkem za cestu: {(retreat.price + retreat.flightPrice).toLocaleString("cs-CZ")} Kč
-</p>
+
+ 
+  <p className="text-lg font-medium">
+    {retreat.airport === "RAK" && flightOffers.length > 0
+      ? `${Math.round(
+          Number(flightOffers[0].totalAmount) *
+            (flightOffers[0].currency === "EUR" ? EUR_TO_CZK : 1)
+        ).toLocaleString("cs-CZ")} Kč`
+      : `${retreat.flightPrice.toLocaleString("cs-CZ")} Kč`}
+  </p>
+  <p className="mt-2 text-sm font-semibold text-[#253b32]">
+    Celkem za cestu:{" "}
+    {(
+      retreat.price +
+      (retreat.airport === "RAK" && flightOffers.length > 0
+        ? Math.round(
+            Number(flightOffers[0].totalAmount) *
+              (flightOffers[0].currency === "EUR" ? EUR_TO_CZK : 1)
+          )
+        : retreat.flightPrice)
+    ).toLocaleString("cs-CZ")} Kč
+  </p>
+
+ 
+
                  
                   <p className="mt-2 text-xs text-[#9a9d95]">
                     Orientační délka: {retreat.duration}
