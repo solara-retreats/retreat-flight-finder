@@ -37,6 +37,91 @@ const retreats = [
     color: "from-amber-100 to-orange-100",
     emoji: "☀️",
   },
+
+  {
+    name: "Madeira Yoga & Nature",
+    location: "Funchal, Madeira",
+    airport: "FNC",
+    flightPrice: 6500,
+    type: "Jóga",
+    duration: "7–10 dní",
+    price: 14500,
+    color: "from-emerald-100 to-teal-100",
+    emoji: "🌿",
+  },
+
+  {
+    name: "Costa Rica Wellness Escape",
+    location: "Nosara, Kostarika",
+    airport: "LIR",
+    flightPrice: 22000,
+    type: "Wellness",
+    duration: "10–14 dní",
+    price: 16500,
+    color: "from-lime-100 to-green-100",
+    emoji: "🌴",
+  },
+
+  {
+    name: "Thailand Island Yoga",
+    location: "Koh Samui, Thajsko",
+    airport: "USM",
+    flightPrice: 18000,
+    type: "Jóga a meditace",
+    duration: "10–14 dní",
+    price: 12000,
+    color: "from-sky-100 to-cyan-100",
+    emoji: "🌊",
+  },
+
+  {
+    name: "Bali Wellness & Meditation",
+    location: "Ubud, Bali",
+    airport: "DPS",
+    flightPrice: 12500,
+    type: "Meditace a wellness",
+    duration: "10–14 dní",
+    price: 15500,
+    color: "from-orange-100 to-amber-100",
+    emoji: "🧘",
+  },
+
+  {
+    name: "Greek Islands Yoga Escape",
+    location: "Chania, Kréta",
+    airport: "CHQ",
+    flightPrice: 7500,
+    type: "Jóga a moře",
+    duration: "7–10 dní",
+    price: 13500,
+    color: "from-blue-100 to-indigo-100",
+    emoji: "🌊",
+  },
+
+  {
+    name: "Morocco Desert Reset",
+    location: "Agafay, Maroko",
+    airport: "RAK",
+    flightPrice: 4500,
+    type: "Jóga a meditace",
+    duration: "5–7 dní",
+    price: 11000,
+    color: "from-amber-100 to-orange-100",
+    emoji: "☀️",
+  },
+
+  {
+    name: "Algarve Ocean Wellness",
+    location: "Lagos, Portugalsko",
+    airport: "FAO",
+    flightPrice: 6000,
+    type: "Wellness a jóga",
+    duration: "7–10 dní",
+    price: 14000,
+    color: "from-teal-100 to-cyan-100",
+    emoji: "🌊",
+  },
+
 ];
 
 export default function Home() {
@@ -47,7 +132,7 @@ export default function Home() {
   const [searched, setSearched] = useState(false);
 
   const results = retreats
-    .filter((retreat) => retreat.price + retreat.flightPrice <= Number(budget || 0))
+    .filter((retreat) => budget === "unlimited" || retreat.price + retreat.flightPrice <= Number(budget || 0))
     .sort((a, b) =>
       sort === "price"
         ? a.price - b.price
@@ -133,6 +218,7 @@ export default function Home() {
               <option value="14000">Do 14 000 Kč</option>
               <option value="18000">Do 18 000 Kč</option>
               <option value="32000">Do 32 000 Kč</option>
+              <option value="unlimited">Bez omezení</option>
             </select>
           </label>
 
