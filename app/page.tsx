@@ -127,7 +127,7 @@ const retreats = [
 export default function Home() {
   const [month, setMonth] = useState("Listopad");
   const [days, setDays] = useState("12");
-  const [budget, setBudget] = useState("32000");
+  const [budget, setBudget] = useState("unlimited");
   const [sort, setSort] = useState("price");
   const [searched, setSearched] = useState(false);
 
@@ -135,7 +135,7 @@ export default function Home() {
     .filter((retreat) => budget === "unlimited" || retreat.price + retreat.flightPrice <= Number(budget || 0))
     .sort((a, b) =>
       sort === "price"
-        ? a.price - b.price
+      ? (a.price + a.flightPrice) - (b.price + b.flightPrice)
         : Number(a.duration.split("-")[0]) -
           Number(b.duration.split("-")[0])
     );
