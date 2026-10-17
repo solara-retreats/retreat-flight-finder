@@ -24,7 +24,18 @@ const MONTHS = [
 ];
 
 const ALL = ["Listopad", "Prosinec", "Leden", "Únor", "Březen"];
-
+const IMAGES: Record<string, string> = {
+  "Yoga & Ocean Escape": "/images/tenerife.jpg",
+  "Mindful Bali Retreat": "/images/bali.jpg",
+  "Sunshine Wellness": "/images/marrakech.jpg",
+  "Madeira Yoga & Nature": "/images/madeira.jpg",
+  "Costa Rica Wellness Escape": "/images/costarica.jpg",
+  "Thailand Island Yoga": "/images/thailand.jpg",
+  "Bali Wellness & Meditation": "/images/bali2.jpg",
+  "Greek Islands Yoga Escape": "/images/crete.jpg",
+  "Morocco Desert Reset": "/images/agafay.jpg",
+  "Algarve Ocean Wellness": "/images/algarve.jpg",
+};
 // Ukázkové (smyšlené) retreaty. flightPrice = orientační cena pro případ výpadku API.
 const retreats = [
   {
@@ -406,8 +417,8 @@ export default function Home() {
                 className="overflow-hidden rounded-2xl border border-[#e7e1d7] bg-white transition hover:-translate-y-1 hover:shadow-lg"
               >
                 <div className={`flex h-48 items-center justify-center bg-gradient-to-br ${r.color}`}>
-                  {r.image ? (
-                    <img src={r.image} alt={r.name} className="h-full w-full object-cover" />
+                  {IMAGES[r.name] ? (
+                    <img src={IMAGES[r.name]} alt={r.name} className="h-full w-full object-cover" />
                   ) : (
                     <span className="text-7xl" role="img" aria-label={r.type}>
                       {r.emoji}
